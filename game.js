@@ -9,70 +9,116 @@ function computerPlay(){
     return options[Math.floor(Math.random() * options.length)];
 }
 
-// console.log(computerPlay());
+let count = 0;
+win = 0;
+lose = 0;
+draw = 0;
 
 // takes two parameters and return the winner as string
 function playRound(playerSelection, computerSelection){
-    playerSelection = playerSelection.toLowerCase();
+    count++;
 
+    let output;
     switch(playerSelection){
         case rock:
             if(computerSelection == rock) {
-                console.log('Draw! Both selected Rock');
-                return 0;
+                output = 'Draw! Both selected Rock';
             } else if (computerSelection == paper) {
-                console.log('You lose! Paper beats Rock');
-                return -1;
+                output = 'You lose! Paper beats Rock';
             } else {
-                console.log('You win! Rock beats Scissors');
-                return 1;
+                output = 'You win! Rock beats Scissors';
             }
+            break;
         case paper:
             if(computerSelection == rock) {
-                console.log('You win! Paper beats Rock');
-                return 1;
+                output = 'You win! Paper beats Rock';
             } else if (computerSelection == paper) {
-                console.log('Draw! Both selected Paper');
-                return 0;
+                output = 'Draw! Both selected Paper';
             } else {
-                console.log('You lose! Scissors beats Paper');
-                return -1;
+                output = 'You lose! Scissors beats Paper';
             }
+            break;
         case scissors:
             if(computerSelection == rock) {
-                console.log('You lose! Rock beats Scissors');
-                return -1;
+                output = 'You lose! Rock beats Scissors';
             } else if (computerSelection == paper) {
-                console.log('You win! Scissors beats Paper');
-                return 1;
+                output = 'You win! Scissors beats Paper';
             } else {
-                console.log('Draw! Both selected Scissors');
-                return 0;
+                output = 'Draw! Both selected Scissors';
             }
+            break;
+    }
+
+    printResult(output);
+    addHistoryDiv();
+    updateScore(output);
+    alertAfterFiveRounds();
+}
+
+function printResult(output){
+    const result = document.querySelector('.result');
+    result.textContent = output;
+}
+
+function addHistoryDiv(){
+    const result = document.querySelector('.result');
+    const clone = result.cloneNode(true);
+
+    const history = document.querySelector('.history');
+    history.appendChild(clone);
+
+    let childCount = history.childElementCount;
+    if(childCount>5){
+        history.removeChild(history.firstChild);
     }
 }
 
-// const playerSelection = rock;
-// const computerSelection = computerPlay();
-// console.log("computer selection -> " + computerSelection)
-// console.log(playRound(playerSelection, computerSelection));
+function updateScore(output){
+    if (output.includes("win")){
+        win++;
+    } else if (output.includes("lose")) {
+        lose++;
+    } else{
+        draw++;
+    }
+}
 
-function game(){
-    let wins = 0;
-    let draws = 0;
-    let losses = 0;
-    for(let i=0; i<5; i++){
-        playerInput = prompt("Choose between rock, paper and scissors");
-        let roundResult = playRound(playerInput, computerPlay());
-        if (roundResult == 0){
-            draws++;
-        } else if (roundResult == 1){
-            wins++;
+function alertAfterFiveRounds(){
+    if(count%5===0){
+        score = `win: ${win} | draw: ${draw} | lose: ${lose} `;
+        let alertString;
+        if (win>lose) {
+            alertString = "You Win!!\n" + score;
+        } else if (win===lose){
+            alertString = "It's a draw\n" + score;
         } else {
-            losses++;
+            alertString = "You Lose!!\n" + score;
         }
+
+        setTimeout(function() {
+            alert(alertString);
+        }, 0);
+
+        //reset all;
+        win = 0;
+        lose = 0;
+        draw = 0;
+        count = 0;
     }
-    console.log(`wins | draws | losses = ${wins} | ${draws} | ${losses}`);
 }
 
-game();
+const inputs = document.querySelectorAll('input');
+
+function removeTransition(e){
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('new-input');
+}
+
+inputs.forEach(input => {
+    input.addEventListener('click', () => {
+        input.classList.add('new-input');
+        playRound(input.name, computerPlay());
+    });
+
+    input.addEventListener('transitionend', removeTransition);
+})

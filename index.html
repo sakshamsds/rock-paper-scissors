@@ -1,12 +1,31 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>rock-paper-scissors</title>
+        <script src="./game.js" defer></script>    
+        <link rel="stylesheet" href="./style.css">    
     </head>
 
     <body>
-        <script src="./game.js"></script>        
+        <div class="game">
+            <div class="play-area">
+                <div class="title">RPS, Round of 5</div>
+                <div class="buttons">
+                    <input type="image" name="rock". src="./images/rock.png" alt="rock">
+                    <input type="image" name="scissors". src="./images/scissors.png" alt="scissors">
+                    <input type="image" name="paper". src="./images/paper.png" alt="paper">
+                </div>
+        
+                <div class="result">Result!!</div>
+            </div>
+    
+            <div class="history"></div>
+        </div>
+
+        <footer>
+            <div>by <a href="https://github.com/sakshamsds" target="_blank">sds</a> @ The Odin Project 2022</div>
+        </footer>
     </body>
     
 </html>
